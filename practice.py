@@ -1,7 +1,4 @@
-from itertools import combinations_with_replacement
-
-n, m = map(int, input().split())
-
-a = combinations_with_replacement(range(1, n+1), m)
-for i in a:
-    print(*i)
+a = [1, 2, 3, 4, 5]
+b = [1, 2, 3]
+c = [x for x in a if x not in b]
+print(c)
