@@ -1,4 +1,10 @@
-a = [1, 2, 3, 4, 5]
-b = [1, 2, 3]
-c = [x for x in a if x not in b]
-print(c)
+def bfs(x):
+    if x > 11:
+        return
+
+    print(x)
+    bfs(x+1)
+    print(x-1 if x-1 > 0)
+
+
+bfs(0)
