@@ -1,61 +1,30 @@
-# 테트로미노
-# dfs문제 (ㅗ 모양은 예외처리)
-
-def mfinger(x, y):
-    global result
-    for middlefinger in middlefingers:
-        mfingerSum = 0
-        for mx, my in middlefinger:
-            nx = x + mx
-            ny = y + my
-            if nx < 0 or nx >= n or ny < 0 or ny >= m:
-                break
-            mfingerSum += board[nx][ny]
-        result = max(result, mfingerSum)
-    return
+import sys
 
 
-def dfs(x, y, cnt, num):
-    global result
+def dfs(start, next, value, visited):
+    global min_value
 
-    if cnt == 4:
-        result = max(result, num)
+    if len(visited) == N:
+        if travel[next][start] != 0:
+            min_value = min(min_value, value + travel[next][start])
         return
-    else:
-        for direction in range(4):
-            nx = x + dx[direction]
-            ny = y + dy[direction]
-            if nx < 0 or nx >= n or ny < 0 or ny >= m or visited[nx][ny]:
-                continue
-            else:
-                visited[nx][ny] = True
-                dfs(nx, ny, cnt+1, num+board[nx][ny])
-                visited[nx][ny] = False
+
+    for i in range(N):
+        if travel[next][i] != 0 and i != start and i not in visited:
+            visited.append(i)
+            dfs(start, i, value + travel[next][i], visited)
+            visited.pop()
 
 
-n, m = map(int, input().split())
+if __name__ == "__main__":
 
-visited = [[False] * m for _ in range(n)]
-board = []
-for _ in range(n):
-    board.append(list(map(int, input().split())))
+    N = int(input())
+    travel = [list(map(int, input().split())) for _ in range(N)]
 
-dx = [-1, 0, 1, 0]
-dy = [0, 1, 0, -1]
+    min_value = sys.maxsize
 
-middlefingers = [
-    [(0, 0), (0, 1), (0, 2), (-1, 1)],
-    [(0, 0), (0, 1), (0, 2), (1, 1)],
-    [(0, 0), (1, 0), (2, 0), (1, 1)],
-    [(0, 0), (1, 0), (2, 0), (1, -1)]
-]
+    # 각 번호에서 시작
+    for i in range(N):
+        dfs(i, i, 0, [i])
 
-result = 0
-for i in range(n):
-    for j in range(m):
-        visited[i][j] = True
-        dfs(i, j, 1, board[i][j])
-        visited[i][j] = False
-        mfinger(i, j)
-
-print(result)
+    print(min_value)
