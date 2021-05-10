@@ -1,43 +1,41 @@
-import sys
-from heapq import heappop, heappush
-
-input = sys.stdin.readline
+from collections import deque
 
 
-def dijkstra(i, j):
-    pq = []
-    heappush(pq, (0, i, j))
-    block[i][j] = 0
-
-    while pq:
-        cnt, x, y = heappop(pq)
-        for direction in range(4):
-            nx = x + dx[direction]
-            ny = y + dy[direction]
-            if nx < 0 or ny < 0 or nx >= r or ny >= c:
-                continue
-            elif block[nx][ny] != -1:
-                continue
-            else:
-                if graph[nx][ny] == 0:
-                    heappush(pq, (0, nx, ny))
-                    block[nx][ny] = block[x][y]
-                else:
-                    heappush(pq, (1, nx, ny))
-                    block[nx][ny] = block[x][y] + 1
+def reverse():
+    graph = [[] for _ in range(n+1)]
+    for a, b, c in roads:
+        graph[a].append((b, c))
 
 
-c, r = map(int, input().split(' '))
+def solution(n, start, end, roads, traps):
+    answer = 0
+    q = deque()
+    q.append((start, answer))
 
-block = [[-1] * c for _ in range(r)]
-graph = []
-for _ in range(r):
-    graph.append(list(map(int, input().rstrip())))
+    graph = [[] for _ in range(n+1)]
+    for a, b, c in roads:
+        graph[a].append((b, c))
 
-# 상하좌우
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
+    while q:
+        v, cost = q.popleft()
 
-dijkstra(0, 0)
-print()
-print(block[r-1][c-1])
+        if v == end:
+            answer = cost
+            break
+
+        if v in traps:
+            reverse()
+
+        for b, c in graph[v]:
+            print(b, c)
+            q.append((b, cost + c))
+
+    return answer
+
+
+n = 3
+start = 1
+end = 3
+roads = [[1, 2, 2], [3, 2, 3]]
+traps = [2]
+print(solution(n, start, end, roads, traps))
