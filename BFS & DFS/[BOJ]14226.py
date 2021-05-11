@@ -2,40 +2,39 @@
 """
 BFS
 세 가지 조건으로 나누어서 실행하다가 답이 나오면 출력
+dictionary로 체크
 """
 from collections import deque
 
 
 def bfs(start):
-    time = 0
     clip = 0
     q = deque()
-    q.append((start, clip, time))
+    q.append((start, clip))
+    visited[(start, clip)] = 0
 
     while q:
-        now, clip, time = q.popleft()
-        print(now)
-        if now == target:
-            return time
+        board, clip = q.popleft()
 
-        # 화면에서 한 개씩 제거할 경우
-        if now > target:
-            q.append((now - 1, clip, time + 1))
-        else:
-            q.append((now - 1, clip, time + 1))
+        if board == target:
+            return visited[(board, clip)]
 
-            if clip < 1:
-                clip = now
-                q.append((now, clip, time + 1))
-            else:
-                # 클립보드에 저장할 경우
-                q.append((now, now, time + 1))
-                # 화면에 붙여넣기 할 경우
-                q.append((now + clip, clip, time + 1))
+        if (board, board) not in visited.keys():
+            visited[(board, board)] = visited[(board, clip)] + 1
+            q.append((board, board))
+
+        if (board - 1, clip) not in visited.keys():
+            visited[(board - 1, clip)] = visited[(board, clip)] + 1
+            q.append((board - 1, clip))
+
+        if (board + clip, clip) not in visited.keys():
+            visited[(board + clip, clip)] = visited[(board, clip)] + 1
+            q.append((board + clip, clip))
 
 
 target = int(input())
-
+visited = dict()
 start = 1
+
 answer = bfs(start)
 print(answer)
