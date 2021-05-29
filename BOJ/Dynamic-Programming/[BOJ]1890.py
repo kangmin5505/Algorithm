@@ -27,3 +27,5 @@ for i in range(n):
                 dp[i + board[i][j]][j] += dp[i][j]
 
 print(dp[n-1][n-1])
+
+
