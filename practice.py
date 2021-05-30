@@ -1,4 +1,2 @@
-data = [0, 1, 2, 1, 3, 1, 2, 1]
-
-print(data[1:4])
-print(data[3:0:-1])
+for i in range(1, 10, 2):
+    print(i)

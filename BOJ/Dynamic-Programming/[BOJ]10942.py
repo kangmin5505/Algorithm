@@ -1,27 +1,30 @@
 # 팰린드롬?
 """
-dynamic programming
+Dynamic Programming
 
-Solution
-- i번째부터 n번째까지 팰린드롬인 경우 1, 아닐 경우 0 으로 선언한 2차원 dp테이블 생성
+해결 방법
+- 1개일 때, 2개일 때, 3개 이상일 때를 나누어서 확인
+- 3개일 때는 확인하는 두 수의 값이 같고 그 사이에 있는 값들이 팰린드롬이면 팰린드롬이다
 """
-import sys
-
-sys.stdin = open('C:\github\Algorithm\BOJ\Dynamic-Programming\input.txt', 'rt')
-
 n = int(input())
-data = [0] + [int(x) for x in input().split()]
-
+data = [0] + list(map(int, input().split()))
 dp = [[0] * (n+1) for _ in range(n+1)]
 
+# 1개일 때
 for i in range(1, n+1):
-    for j in range(i, n+1):
-        if data[i:j+1] == data[j:i-1:-1]:
-            dp[i][j] = 1
+    dp[i][i] = 1
 
+# 2개일 때
+for i in range(1, n):
+    if data[i] == data[i+1]:
+        dp[i][i+1] = 1
 
-for i in dp:
-    print(i)
+# 3개일 때(숫자가 3개면 첫 번째와 마지막 사이의 거리는 2임)
+for length in range(2, n):
+    for i in range(1, n+1-length):
+        if data[i] == data[i+length] and dp[i+1][i+length-1] == 1:
+            dp[i][i+length] = 1
+
 m = int(input())
 for _ in range(m):
     s, e = map(int, input().split())
