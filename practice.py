@@ -1,2 +1,3 @@
-for i in range(1, 10, 2):
-    print(i)
+a = [[1, 2, 3], [2, 3, 4], [1, 1, 5]]
+
+print(max(max(a)))
