@@ -72,6 +72,8 @@ for _ in range(tc):
     ans = int(1e9)
     for i in range(h+2):
         for j in range(w+2):
+            # if graph[i][j] != '*':
+            # 위에 것으로 하면 고립되어 있는 '.'도 포함을 시켜서 오답이 나온다
             if prisoner_1[i][j] != -1 and prisoner_2[i][j] != -1 and sanggen[i][j] != -1:
                 temp = prisoner_1[i][j] + prisoner_2[i][j] + sanggen[i][j]
                 # 문일 경우 중복 제거

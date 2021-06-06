@@ -1,70 +1,53 @@
 # 벽 부수고 이동하기
 """
 BFS
-모든 값이 -1인 step 리스트를 선언하여 
-시작시 시작점에 0 대입
-1을 만나면 +1 해주고
-조건식에 1이상일때 block을 만나면 가지 못하도록 설정
-"""
 
+해결 방법
+- 벽을 부수고 이동하는 경우와 벽을 부수지 않고 이동하는 경우로 구분
+"""
 import sys
 from collections import deque
 
-sys.stdin = open('C:\github\Algorithm\BFS & DFS\input.txt', 'rt')
+sys.stdin = open('C:\github\Algorithm\BOJ\DFS & BFS\input.txt', 'rt')
 
 
-def bfs(state, i, j):
-    q = deque()
-    q.append((state, i, j))
-    step[i][j] = 1
+def BFS():
+    dQ = deque()
+    # 시작 좌표와 벽을 부술 수 있는 기회
+    dQ.append([0, 0, 1])
+    # 벽을 부수고 이동하는 경우와 부수지 않고 이동하는 경우 따로 확인
+    visited = [[[0, 0] for _ in range(m)] for _ in range(n)]
+    visited[0][0][1] = 1
 
-    while q:
-        state, x, y = q.popleft()
+    while dQ:
+        x, y, w = dQ.popleft()
 
-        if x == r-1 and y == c-1:
-            return step[x][y]
+        if x == n-1 and y == m-1:
+            return visited[x][y][w]
 
-        for direction in range(4):
-            nx = x + dx[direction]
-            ny = y + dy[direction]
+        for d in range(4):
+            nx = x + dx[d]
+            ny = y + dy[d]
 
-            if nx < 0 or ny < 0 or nx >= r or ny >= c:
-                continue
-            else:
-                if graph[nx][ny] == 1 and state == 1:
-                    step[nx][ny] = step[x][y] + 1
-                    q.append((state-1, nx, ny))
-                elif graph[nx][ny] == 0 and step[nx][ny] == -1:
-                    step[nx][ny] = step[x][y] + 1
-                    q.append((state, nx, ny))
+            if 0 <= nx < n and 0 <= ny < m:
+                # 벽을 부수지 않고 이동하는 경우
+                if graph[nx][ny] == 0 and visited[nx][ny][w] == 0:
+                    visited[nx][ny][w] = visited[x][y][w] + 1
+                    dQ.append([nx, ny, w])
+                # 벽을 부수고 이동한 경우
+                if graph[nx][ny] == 1 and w == 1:
+                    visited[nx][ny][0] = visited[x][y][w] + 1
+                    dQ.append([nx, ny, 0])
 
-                # if state == 0:
-                #     if graph[nx][ny] == 0:
-                #         q.append((state, nx, ny))
-                #         step[nx][ny] = step[x][y] + 1
-                #     elif graph[nx][ny] == 1:
-                #         q.append((state + 1, nx, ny))
-                #         step[nx][ny] = step[x][y] + 1
-                # elif state == 1:
-                #     if graph[nx][ny] == 1:
-                #         continue
-                #     else:
-                #         q.append((state, nx, ny))
-                #         step[nx][ny] = step[x][y] + 1
-
+    # graph[n-1][m-1]에 도달하지 못 한 경우
     return -1
 
 
-r, c = map(int, input().split(' '))
+n, m = map(int, input().split())
+graph = [list(map(int, input())) for _ in range(n)]
 
-step = [[-1] * c for _ in range(r)]
-graph = []
-for _ in range(r):
-    graph.append(list(map(int, input().rstrip())))
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
 
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
-
-print(bfs(1, 0, 0))
-for i in step:
-    print(i)
+ans = BFS()
+print(ans)
