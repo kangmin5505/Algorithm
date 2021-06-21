@@ -1,4 +1,4 @@
-a = list(map(int, input().split()))
-a.insert(0, 0)
+from itertools import permutations
 
-a = [0] + list(map(int, input().split()))
+for i in permutations([1,2,3], 3):
+    print(type(i))
