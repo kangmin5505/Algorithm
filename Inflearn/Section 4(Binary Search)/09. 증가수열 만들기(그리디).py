@@ -1,8 +1,7 @@
-import sys
-from collections import deque
+# import sys
 
-sys.stdin = open(
-    "C:\\github\\Algorithm\\Inflearn\\Section 4(Binary Search)\\input.txt", "rt")
+# sys.stdin = open(
+#     "C:\\github\\Algorithm\\Inflearn\\Section 4(Binary Search)\\input.txt", "rt")
 
 
 """
@@ -12,12 +11,28 @@ sys.stdin = open(
 """
 
 n = int(input())
-numbers = list(map(int, input().split()))
+nums = list(map(int, input().split()))
 
-q = deque(numbers)
-ans = ''
-while q:
-    left = q.popleft()
-    right = q.pop()
-    if left < right:
-        ans += 'L'
+lt = 0
+rt = n-1
+ans = ""
+temp = []
+last = 0
+while lt <= rt:
+    if nums[lt] > last:
+        temp.append((nums[lt], 'L'))
+    if nums[rt] > last:
+        temp.append((nums[rt], 'R'))
+    temp.sort()
+    if len(temp) == 0:
+        break
+    else:
+        ans += temp[0][1]
+        last = temp[0][0]
+        if temp[0][1] == "L":
+            lt += 1
+        else:
+            rt -= 1
+    temp.clear()
+print(len(ans))
+print(ans)
